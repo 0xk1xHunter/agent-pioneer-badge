@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<link rel="icon" href="data:," />
+<title>Agent Pioneer Badge</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0e0e12; color: #f2f2f5;
+    min-height: 100vh; display: flex; justify-content: center;
+  }
+  .wrap { max-width: 560px; width: 100%; padding: 32px 20px 48px; text-align: center; }
+  h1 { font-size: 28px; margin: 12px 0 4px; }
+  .sub { color: #a1a1aa; margin: 0 0 24px; font-size: 15px; }
+  .badge-svg { width: 200px; height: 200px; margin: 0 auto; display: block; }
+  .facts { text-align: left; background: #1a1a20; border: 1px solid #2c2c35;
+    border-radius: 12px; padding: 16px 20px; margin: 24px 0; font-size: 15px; line-height: 1.7; }
+  .facts li { margin: 4px 0; }
+  button {
+    display: block; width: 100%; padding: 14px; margin: 10px 0; min-height: 48px;
+    font-size: 16px; font-weight: 600; border: none; border-radius: 10px;
+    cursor: pointer; background: #f0b90b; color: #111;
+  }
+  button:disabled { background: #3f3f46; color: #a1a1aa; cursor: not-allowed; }
+  button.secondary { background: #26262e; color: #f2f2f5; border: 1px solid #3f3f46; }
+  #status {
+    margin-top: 16px; padding: 12px; border-radius: 10px; font-size: 14px;
+    line-height: 1.5; min-height: 20px; background: #1a1a20; border: 1px solid #2c2c35;
+    text-align: left; word-break: break-all;
+  }
+  #status.ok { border-color: #22c55e; }
+  #status.err { border-color: #ef4444; }
+  #status a { color: #f0b90b; }
+  .howto { text-align: left; font-size: 14px; color: #a1a1aa; line-height: 1.7;
+    background: #1a1a20; border: 1px solid #2c2c35; border-radius: 12px; padding: 14px 18px; margin-top: 20px; }
+  .howto strong { color: #f2f2f5; }
+  .note { font-size: 12px; color: #71717a; margin-top: 24px; line-height: 1.6; }
+  .note a { color: #a1a1aa; }
+  .mono { font-family: monospace; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Badge art -->
+  <svg class="badge-svg" viewBox="0 0 200 200" role="img" aria-label="Agent Pioneer Badge">
+    <defs>
+      <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#f0b90b"/><stop offset="1" stop-color="#b8860b"/>
+      </linearGradient>
+    </defs>
+    <circle cx="100" cy="100" r="92" fill="#1a1a20" stroke="url(#g)" stroke-width="5"/>
+    <circle cx="100" cy="100" r="74" fill="none" stroke="#f0b90b" stroke-width="1.5" stroke-dasharray="4 5" opacity="0.6"/>
+    <path d="M100 52 L118 84 L154 88 L128 112 L136 148 L100 130 L64 148 L72 112 L46 88 L82 84 Z"
+      fill="url(#g)"/>
+    <text x="100" y="172" text-anchor="middle" fill="#f2f2f5" font-size="13" font-weight="700"
+      font-family="sans-serif" letter-spacing="2">PIONEER</text>
+  </svg>
+
+  <h1>Agent Pioneer Badge</h1>
+  <p class="sub">A free badge for early Agent ID holders.</p>
+
+  <ul class="facts">
+    <li><strong>Free</strong> — you pay only the network gas fee.</li>
+    <li><strong>1 per Agent ID holder</strong> — one badge per wallet that holds an Agent ID.</li>
+    <li><strong>Max supply: 1,000</strong> badges, first come first served.</li>
+    <li><strong>Network:</strong> BNB Chain.</li>
+  </ul>
+
+  <button id="connectBtn" type="button">Connect Wallet</button>
+  <button id="checkBtn" type="button" class="secondary" disabled>Check my Agent ID</button>
+  <button id="claimBtn" type="button" disabled>Claim Badge</button>
+
+  <div id="status" role="status" aria-live="polite">Connect your wallet to begin.</div>
+
+  <div class="howto">
+    <strong>How to connect:</strong>
+    <ol style="margin:8px 0 0; padding-left:20px;">
+      <li>In the Binance app, switch to the <strong>Wallet</strong> tab (the Web3 Wallet) — the
+      exchange app's own browser does not connect a wallet to pages.</li>
+      <li>From the Wallet tab, open <strong>Discover</strong> and open this page's link in its dApp browser.</li>
+      <li>Tap <strong>Connect Wallet</strong> and approve the connection in the app.</li>
+      <li>Tap <strong>Check my Agent ID</strong>, then <strong>Claim Badge</strong>.</li>
+    </ol>
+    <p style="margin:10px 0 0;">There is no QR code or pairing code login — the wallet connects
+    only when this page is opened inside the Web3 Wallet's dApp browser.</p>
+  </div>
+
+  <p class="note">This badge is a collectible with no monetary value and no promised returns.
+  Live on BNB Chain — contract <span class="mono">0x6FBBe75e2111f8216737f5cf07D35b4F2474db95</span> (<a href="https://bscscan.com/address/0x6FBBe75e2111f8216737f5cf07D35b4F2474db95" target="_blank" rel="noopener">BscScan</a>).</p>
+</div>
+
+<script>
+// ======== CONTRACT FACTS (deployed 2026-11-18, BNB Chain mainnet) ========
+var BADGE_CONTRACT = "0x6FBBe75e2111f8216737f5cf07D35b4F2474db95";
+var AGENT_ID_CONTRACT = "0x60b9262456de011f7d15a54cdd8c48baaa8b022f"; // SPACE ID Agent ID (ERC-721)
+var BSC_CHAIN_ID = "0x38"; // 56
+var CLAIM_SELECTOR = "0xe985e9c5";    // claim()
+var BALANCEOF_SELECTOR = "0x70a08231"; // balanceOf(address)
+// ==========================================================================
+
+var provider = null;   // detected EIP-1193 provider
+var account = null;    // connected address
+var busy = false;
+
+var statusEl = document.getElementById("status");
+var connectBtn = document.getElementById("connectBtn");
+var checkBtn = document.getElementById("checkBtn");
+var claimBtn = document.getElementById("claimBtn");
+
+function setStatus(msg, kind) {
+  statusEl.textContent = msg;
+  statusEl.className = kind || "";
+}
+
+function setStatusHtml(html, kind) {
+  statusEl.innerHTML = html;
+  statusEl.className = kind || "";
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+
+function errText(e) {
+  if (!e) return "unknown error";
+  if (e.code === 4001) return "rejected in the wallet";
+  return e.message ? e.message : String(e);
+}
+
+function shortAddr(a) {
+  return a.slice(0, 6) + "…" + a.slice(-4);
+}
+
+function refreshButtons() {
+  checkBtn.disabled = !account || busy;
+  claimBtn.disabled = !account || busy;
+  connectBtn.disabled = busy;
+}
+
+// ---------- raw provider access (no libraries) ----------
+
+function rpc(prov, method, params) {
+  params = params || [];
+  if (prov && typeof prov.request === "function") {
+    return prov.request({ method: method, params: params });
+  }
+  if (prov && typeof prov.send === "function") {
+    return Promise.resolve(prov.send(method, params));
+  }
+  if (prov && typeof prov.sendAsync === "function") {
+    // Legacy providers (older BinanceChain / web3.currentProvider) only
+    // expose the callback-style sendAsync.
+    return new Promise(function (resolve, reject) {
+      prov.sendAsync({ method: method, params: params }, function (err, res) {
+        if (err) { reject(err); return; }
+        if (res && res.error) { reject(res.error); return; }
+        resolve(res ? res.result : undefined);
+      });
+    });
+  }
+  return Promise.reject(new Error("Wallet provider does not support requests."));
+}
+
+function requestAccounts(prov) {
+  return rpc(prov, "eth_requestAccounts").catch(function (e) {
+    // Older BinanceChain-style providers expose enable() instead of
+    // eth_requestAccounts. A user rejection (4001) is final — don't retry.
+    if (e && e.code === 4001) throw e;
+    if (prov && typeof prov.enable === "function") return prov.enable();
+    throw e;
+  });
+}
+
+// ---------- provider detection ----------
+// Across Binance app versions the wallet has been injected under several
+// different globals (window.ethereum, window.BinanceChain, window.binancechain,
+// window.binance, web3.currentProvider, EIP-6963 announcements), injection
+// can land several seconds after the page loads, and when the page is framed
+// the provider may only be injected into the top frame. Check every known
+// location, prefer a Binance-flagged provider, and keep looking for the
+// full timeout instead of giving up after a few seconds.
+
+var eip6963Providers = [];
+
+window.addEventListener("eip6963:announceProvider", function (event) {
+  try {
+    var detail = event.detail;
+    if (detail && detail.provider) eip6963Providers.push(detail.provider);
+  } catch (e) { /* ignore */ }
+});
+
+function requestEip6963Providers() {
+  try { window.dispatchEvent(new Event("eip6963:requestProvider")); } catch (e) { /* ignore */ }
+}
+
+function looksLikeProvider(p) {
+  return !!p && (typeof p.request === "function" || typeof p.send === "function" ||
+    typeof p.sendAsync === "function" || typeof p.enable === "function");
+}
+
+function collectProviders() {
+  var list = [];
+  function push(p) {
+    if (looksLikeProvider(p) && list.indexOf(p) === -1) list.push(p);
+  }
+  function pushFrom(root) {
+    if (!root) return;
+    try { push(root.ethereum); } catch (e) { /* cross-origin frame */ }
+    try {
+      if (root.ethereum && root.ethereum.providers) {
+        root.ethereum.providers.forEach(push);
+      }
+    } catch (e) { /* ignore */ }
+    try { push(root.BinanceChain); } catch (e) { /* ignore */ }
+    try { push(root.binancechain); } catch (e) { /* ignore */ }
+    try { if (root.binance) push(root.binance.ethereum); } catch (e) { /* ignore */ }
+    try { if (root.web3) push(root.web3.currentProvider); } catch (e) { /* ignore */ }
+  }
+  pushFrom(window);
+  // Framed page: if the wallet injected only into the top frame, same-origin
+  // framing still lets us reach it; cross-origin access throws or returns
+  // undefined and is skipped.
+  try { if (window.parent && window.parent !== window) pushFrom(window.parent); } catch (e) { /* ignore */ }
+  try { if (window.top && window.top !== window && window.top !== window.parent) pushFrom(window.top); } catch (e) { /* ignore */ }
+  eip6963Providers.forEach(push);
+  return list;
+}
+
+function findProvider() {
+  var list = collectProviders();
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].isBinance) return list[i];
+  }
+  return list.length ? list[0] : null;
+}
+
+function detectProvider(timeoutMs) {
+  requestEip6963Providers();
+  var found = findProvider();
+  if (found) return Promise.resolve(found);
+  return new Promise(function (resolve) {
+    var started = Date.now();
+    var timer = setInterval(function () {
+      requestEip6963Providers();
+      var p = findProvider();
+      if (p || Date.now() - started >= timeoutMs) {
+        clearInterval(timer);
+        resolve(p || null);
+      }
+    }, 250);
+  });
+}
+
+// ---------- chain handling ----------
+
+function currentChainId(prov) {
+  return rpc(prov, "eth_chainId").catch(function () {
+    // Legacy providers may only support net_version (decimal string).
+    return rpc(prov, "net_version").then(function (v) {
+      return "0x" + Number(v).toString(16);
+    });
+  });
+}
+
+function ensureBscChain(prov) {
+  return currentChainId(prov).then(function (chainId) {
+    if (String(chainId).toLowerCase() === BSC_CHAIN_ID) return;
+    return rpc(prov, "wallet_switchEthereumChain", [{ chainId: BSC_CHAIN_ID }]).then(function () {
+      return currentChainId(prov).then(function (after) {
+        if (String(after).toLowerCase() !== BSC_CHAIN_ID) {
+          throw new Error("Please switch your wallet to BNB Chain (chain id 56) and try again.");
+        }
+      });
+    }).catch(function () {
+      // Some in-app providers can't switch programmatically. Re-check: the
+      // wallet may already be on BSC, otherwise ask for a manual switch
+      // instead of failing with a raw provider error.
+      return currentChainId(prov).then(function (now) {
+        if (String(now).toLowerCase() === BSC_CHAIN_ID) return;
+        throw new Error("Your wallet is not on BNB Chain. Switch the network to BNB Chain (56) in the wallet, then try again.");
+      });
+    });
+  });
+}
+
+// ---------- on-chain reads ----------
+
+function balanceOfCalldata(addr) {
+  var clean = addr.toLowerCase().replace(/^0x/, "");
+  var padded = ("000000000000000000000000" + clean).slice(-64);
+  return BALANCEOF_SELECTOR + padded;
+}
+
+function readBalance(prov, contract, addr) {
+  return rpc(prov, "eth_call", [
+    { to: contract, data: balanceOfCalldata(addr) },
+    "latest"
+  ]).then(function (result) {
+    if (!result || result === "0x") return 0n;
+    return BigInt(result);
+  });
+}
+
+// ---------- actions ----------
+
+function noWalletMessage() {
+  var ua = navigator.userAgent || "";
+  if (/Binance/i.test(ua)) {
+    return "You're in the Binance app, but this browser view doesn't share a wallet with the page. Switch to the Wallet (Web3) tab in the Binance app, open this page from its Discover / dApp browser, then tap Connect Wallet.";
+  }
+  return "No wallet found. Open this page inside the Binance Web3 Wallet's dApp browser, then tap Connect Wallet.";
+}
+
+function connectWallet() {
+  if (busy) return;
+  busy = true; refreshButtons();
+  setStatus("Looking for your wallet…");
+  detectProvider(10000).then(function (prov) {
+    if (!prov) {
+      busy = false; refreshButtons();
+      setStatus(noWalletMessage(), "err");
+      return null;
+    }
+    provider = prov;
+    attachProviderEvents(prov);
+    setStatus("Requesting connection — approve it in your wallet…");
+    return requestAccounts(prov).then(function (accounts) {
+      if (!accounts || !accounts.length) throw new Error("No account returned by the wallet.");
+      account = accounts[0];
+      return ensureBscChain(prov).then(function () {
+        connectBtn.textContent = "Connected: " + shortAddr(account);
+        setStatus("Connected: " + account + " (BNB Chain). Now tap Check my Agent ID.", "ok");
+      });
+    });
+  }).catch(function (e) {
+    setStatus("Connection failed: " + errText(e), "err");
+  }).then(function () {
+    busy = false; refreshButtons();
+  });
+}
+
+function checkAgentId() {
+  if (busy) return;
+  if (!provider || !account) { setStatus("Connect your wallet first.", "err"); return; }
+  busy = true; refreshButtons();
+  setStatus("Checking Agent ID on-chain…");
+  ensureBscChain(provider).then(function () {
+    return readBalance(provider, AGENT_ID_CONTRACT, account);
+  }).then(function (bal) {
+    if (bal > 0n) {
+      return readBalance(provider, BADGE_CONTRACT, account).then(function (badgeBal) {
+        if (badgeBal > 0n) {
+          setStatus("You hold an Agent ID (" + bal.toString() + ") — and you already hold the Pioneer Badge. One badge per wallet.", "ok");
+        } else {
+          setStatus("You hold an Agent ID (" + bal.toString() + "). You are eligible to claim the badge.", "ok");
+        }
+      }, function () {
+        setStatus("You hold an Agent ID (" + bal.toString() + "). You are eligible to claim the badge.", "ok");
+      });
+    }
+    setStatus("This wallet does not hold an Agent ID, so it cannot claim the badge.", "err");
+  }).catch(function (e) {
+    setStatus("Could not check Agent ID: " + errText(e), "err");
+  }).then(function () {
+    busy = false; refreshButtons();
+  });
+}
+
+function pollReceipt(txHash, attemptsLeft) {
+  return rpc(provider, "eth_getTransactionReceipt", [txHash]).then(function (receipt) {
+    if (receipt) return receipt;
+    if (attemptsLeft <= 0) return null;
+    return new Promise(function (resolve) { setTimeout(resolve, 2500); })
+      .then(function () { return pollReceipt(txHash, attemptsLeft - 1); });
+  });
+}
+
+function claimBadge() {
+  if (busy) return;
+  if (!provider || !account) { setStatus("Connect your wallet first.", "err"); return; }
+  busy = true; refreshButtons();
+  setStatus("Checking eligibility on-chain…");
+  ensureBscChain(provider).then(function () {
+    return readBalance(provider, AGENT_ID_CONTRACT, account);
+  }).then(function (bal) {
+    if (bal === 0n) {
+      setStatus("This wallet does not hold an Agent ID, so it cannot claim the badge.", "err");
+      return null;
+    }
+    return readBalance(provider, BADGE_CONTRACT, account).then(function (badgeBal) {
+      if (badgeBal > 0n) {
+        setStatus("You already hold the Pioneer Badge — one badge per wallet.", "ok");
+        return null;
+      }
+      setStatus("Eligible. Sending your claim — confirm it in your wallet. The badge is free; you pay only gas.");
+      return rpc(provider, "eth_sendTransaction", [{
+        from: account,
+        to: BADGE_CONTRACT,
+        data: CLAIM_SELECTOR,
+        value: "0x0"
+      }]).then(function (txHash) {
+        setStatusHtml(
+          "Claim sent. Waiting for confirmation…<br>Tx: <a href=\"https://bscscan.com/tx/" +
+          escapeHtml(txHash) + "\" target=\"_blank\" rel=\"noopener\">" + escapeHtml(txHash) + "</a>"
+        );
+        return pollReceipt(txHash, 40).then(function (receipt) {
+          var link = "<a href=\"https://bscscan.com/tx/" + escapeHtml(txHash) +
+            "\" target=\"_blank\" rel=\"noopener\">" + escapeHtml(txHash) + "</a>";
+          if (!receipt) {
+            setStatusHtml("Claim sent but not confirmed yet. Check it on BscScan:<br>Tx: " + link);
+          } else if (receipt.status === "0x1") {
+            setStatusHtml("Badge claimed! Your Agent Pioneer Badge is in your wallet.<br>Tx: " + link, "ok");
+          } else {
+            setStatusHtml("The claim transaction failed on-chain (it may already be claimed, or the supply ran out).<br>Tx: " + link, "err");
+          }
+        });
+      });
+    });
+  }).catch(function (e) {
+    setStatus("Claim failed: " + errText(e), "err");
+  }).then(function () {
+    busy = false; refreshButtons();
+  });
+}
+
+// ---------- wiring ----------
+
+connectBtn.addEventListener("click", connectWallet);
+checkBtn.addEventListener("click", checkAgentId);
+claimBtn.addEventListener("click", claimBadge);
+
+// Follow account / network changes when the provider supports events.
+var eventsAttachedTo = null;
+function attachProviderEvents(prov) {
+  if (!prov || prov === eventsAttachedTo || typeof prov.on !== "function") return;
+  eventsAttachedTo = prov;
+  prov.on("accountsChanged", function (accounts) {
+    account = accounts && accounts.length ? accounts[0] : null;
+    if (!account) {
+      connectBtn.textContent = "Connect Wallet";
+      setStatus("Wallet disconnected. Connect your wallet to begin.");
+    } else {
+      connectBtn.textContent = "Connected: " + shortAddr(account);
+      setStatus("Connected: " + account, "ok");
+    }
+    refreshButtons();
+  });
+  prov.on("chainChanged", function () {
+    // The next action re-checks and requests a switch back to BNB Chain.
+    if (account) setStatus("Network changed. Your next check or claim will switch back to BNB Chain.");
+  });
+}
+
+// In-app browsers may inject the provider well after load, or only once the
+// webview becomes visible again. Watch in the background so a late injection
+// is picked up without the user having to reload the page.
+var watchingProvider = false;
+function watchForProvider() {
+  if (watchingProvider || provider) return;
+  watchingProvider = true;
+  detectProvider(10000).then(function (prov) {
+    watchingProvider = false;
+    if (!prov) return;
+    if (!provider) provider = prov;
+    attachProviderEvents(prov);
+    if (!account) setStatus("Wallet found — tap Connect Wallet to continue.");
+  });
+}
+watchForProvider();
+window.addEventListener("pageshow", watchForProvider);
+document.addEventListener("visibilitychange", function () {
+  if (!document.hidden) watchForProvider();
+});
+
+refreshButtons();
+</script>
+</body>
+</html>
